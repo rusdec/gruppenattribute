@@ -9,78 +9,153 @@ class IBlocks {
 	/**
 	*	@return array
 	*/
-	public static function getAll() {
-		return array_merge(self::getRegistered(), self::getFree());
+	public function getAll() {
+		return $this->getUnused();
 	}
 
 	/**
 	*	@return array
 	*/
-	public static function getRegistered() {
-		$unfetchedRegistered = GruppenAttribute\IBlockTable::getList(
-			[
-				'select' => ['ID', 'NAME']
-			]
-		);
-		return $unfetchedRegistered->FetchAll();
+	public function getAllUsed() {
+		return $this->getUsed();
 	}
 
 	/**
 	*	@return array
 	*/
-	public static function getFree() {
-		$registeredTmp = self::getRegistered();
-		$registered = [];
-		foreach($registeredTmp as $tmp) {
-			$registered[] = $tmp['ID'];
+	public function getUsedById($id) {
+		return $this->getUsed(['filter'=>['ID'=>$id]]);
+	}
+
+	/**
+	*	@return array
+	*/
+	public function getUnusedById($id) {
+		return $this->getUnused(['filter'=>['ID'=>$id]]);
+	}
+
+	/**
+	*	@return array
+	*/
+	public function getUsed($inputParams) {
+		$params['select'] = (isset($inputParams['select'])) ? $inputParams['select'] : ['*'];
+		if (isset($inputParams['filter']))
+			$params['filter'] = $inputParams['filter'];
+
+		$unfetchedResult = GruppenAttribute\IBlockTable::getList($params);
+
+		return $unfetchedResult->FetchAll();
+	}
+
+	/**
+	*	@return array
+	*/
+	public function getUnused($inputParams) {
+		$params['select'] = (isset($inputParams['select'])) ? $inputParams['select'] : ['ID', 'NAME'];
+		if (isset($inputParams['filter']))
+			$params['filter'] = $inputParams['filter'];
+
+		$unfetchedResult = Iblock\IblockTable::getList($params);
+
+		return $unfetchedResult->FetchAll();
+	}
+
+	/**
+	*	@return array
+	*/
+	public function getAllUnused() {
+		$usedTmp = $this->getAllUsed();
+		$used_id = [];
+		foreach($usedTmp as $tmp) {
+			$used_id[] = $tmp['ID'];
 		}
-		$unfetchedFree = Iblock\IblockTable::getList(
+
+		$unfetchedUnused = Iblock\IblockTable::getList(
 			[
 				'select' => ['ID', 'NAME'],
-				'filter' => ['!=ID' => $registered]
+				'filter' => ['!=ID' => $used_id]
 			]
 		);
-
-		return $unfetchedFree->FetchAll();
+		return $unfetchedUnused->FetchAll();
 	}
 
 }
 
 class Groups {
 	
-	protected $iblockID;
+	/**
+	*	@return array
+	*/
+	private function get($inputParams = []) {
+		$params['select'] = (isset($inputParams['select'])) ? $inputParams['select'] : ['*'];
+		if (isset($inputParams['filter']))
+			$params['filter'] = $inputParams['filter'];
 
-	function __construct($iblockID) {
-		$this->iblockID = $iblockID;
+		$unfetchedResult = GruppenAttribute\GroupTable::getList($params);
+
+		return $unfetchedResult->FetchAll();
 	}
 
 	/**
-	*
 	*	@return array
-	*
 	*/
 	public function getAll() {
-		$unfetchedGroups = GroupTable::getList(
-			[
-				'select' => ['*']
-			]
-		);
-
-		return $unfetchedGroups->FetchAll();
+		return $this->get();
+	}
+	
+	/**
+	*	@param int
+	*	@return array
+	*/
+	public function getById($id) {
+		return $this->get(['filter' => ['ID' => $id]]);
 	}
 
 	/**
-	*
+	*	@param int
 	*	@return array
+	*/
+	public function getAllByIblockId($id) {
+		return $this->get(['filter' => ['IBLOCK_ID' => $id]]);
+	}
+
+	/**
+	*	@param string
+	*	@return array
+	*/
+	public function getByCode($code) {
+		return $this->get(['filter' => ['CODE' => $code]]);
+	}
+
+	/**
+	* 
+	*	Функции изменения
 	*
 	*/
-	public function getAllForIblock($id) {
-		$unfetchedGroups = GroupTable::getList(
-			[
-				'select' => ['*'],
-				'filter' => ['IBLOCK.IBLOCK_ID' => $id]
-			]
-		);
-		return $unfetchedGroups->FetchAll();
+	
+	/**
+	*	@param [NAME => string, CODE => string, IBLOCK_ID => int]
+	*	@return int|bool
+	*/
+	public function addGroup($params) {
+		return GruppenAttribute\GroupTable::add($params);
+	}
+
+	/**
+	*	@param int
+	*	@return bool
+	*/
+	public function deleteGroup($id) {
+		return GruppenAttribute\GroupTable::delete($id);
+	}
+
+	/**
+	*	@param [NAME => string, CODE => string, IBLOCK_ID => int]
+	*	@return bool
+	*/
+	public function updateGroup($params) {
+		$id = $params['ID'];
+		unset($params['ID']);
+		return GruppenAttribute\GroupTable::update($id, $params);
 	}
 }

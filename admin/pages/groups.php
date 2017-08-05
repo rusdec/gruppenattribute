@@ -1,10 +1,13 @@
 <?
 \Bitrix\Main\Loader::includeModule('gruppenattribute');
-use Volex\GruppenAttribute as VG;
+use Volex\GruppenAttribute as vGA;
 ?>
-<?$groupsList = VG\Groups::getAll();?>
-<?$currentLevel = $navigation[$_GET['level']]; ?>
-<?$iblocksList = VG\IBlocks::getAll();?>
+<?$currentLevel	= $navigation[$_GET['level']]; ?>
+<?$groups = new vGA\Groups;?>
+<?$iblocks = new vGA\IBlocks;?>
+
+<?$groupsList		= $groups->getAll();?>
+<?$iblocksList		= $iblocks->getAll();?>
 <h1><?= $currentLevel['name']; ?></h1>
 <div class="control">
 	
