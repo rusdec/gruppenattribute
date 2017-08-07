@@ -89,8 +89,15 @@ class ApiStructure {
 		return $this->fields;
 	}
 
-	public function isMethodExists($method, $entity) {
-		return isset($this->entities[$entity][$method]);
+	/**
+	*	@param array $params {
+	*		@option string "entity"
+	*		@option string "method"
+	*	}
+	*	@return bool
+	*/
+	public function isMethodExists($params) {
+		return in_array($params['method'], $this->entities[$params['entity']]);
 	}
 
 	public function isEntityExists($entity) {
