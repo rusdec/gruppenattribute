@@ -23,7 +23,13 @@
 		'name'	=> 'Группа',
 		'code'	=> 'group',
 		'parent' => 'groups',
-		'child'	=> 'sections'
+		'child'	=> 'section'
+	],
+	'section' => [
+		'name' => 'Раздел',
+		'code' => 'section',
+		'parent' => 'group',
+		'child' => NULL
 	],
 	'properties' => [
 		'name'	=> 'Свойства',

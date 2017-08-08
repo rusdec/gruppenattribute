@@ -1,19 +1,19 @@
 <?
 namespace Volex\GruppenAttribute;
 
-use \Bitrix\Iblock;
 use Volex\GruppenAttribute as VGA;
 
 final class Factory {
 
 	public static function instance($class) {
 		switch ($class) {
-			case 'groups' : return new VGA\Groups;
+			case 'groups':			return new VGA\Groups;
 			break;
-			case 'iblocks' : return new VGA\Iblocks;
+			case 'iblocks':		return new VGA\Iblocks;
 			break;
-			case 'sections' : return new VGA\Sections;
+			case 'sections':		return new VGA\Sections;
 			break;
+			case 'properties':	return new VGA\Properties;
 		}
 	}
 
