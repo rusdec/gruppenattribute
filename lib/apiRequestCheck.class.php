@@ -22,8 +22,8 @@ final class ApiRequestCheck extends ApiStructure {
 	*	}
 	*/
 	protected $result = [
-		'has_error'			=> false,
-		'error_messages'	=> []
+		"has_error"			=> false,
+		"error_messages"	=> []
 	];
 
 	function __construct($request) {
@@ -43,6 +43,8 @@ final class ApiRequestCheck extends ApiStructure {
 		$this->checkMethod(['entity' => $this->request['entity'], 'method' => $this->request['method']]);
 		if($this->hasError())
 			return $this->result;
+
+		return $this->result;
 	}
 
 
@@ -57,8 +59,8 @@ final class ApiRequestCheck extends ApiStructure {
 		foreach($this->getFields() as $field => $properties) {
 			if($properties['require'] && !array_key_exists($field, $this->request)) {
 				$this->setError([
-					'text'	=> Loc::getMessage('NOT_EXISTS_REQUIRE_FIELD'),
-					'detail'	=> $field
+					"text"	=> Loc::getMessage('NOT_EXISTS_REQUIRE_FIELD'),
+					"detail"	=> $field
 				]);
 				continue;
 			}
@@ -71,8 +73,8 @@ final class ApiRequestCheck extends ApiStructure {
 	protected function checkField($field) {
 		if(!isset($this->fields[$field]))	
 			$this->setError([
-				'text'	=> Loc::getMessage('NOT_EXISTS_ENTITY'),
-				'detail'	=> $entity
+				"text"	=> Loc::getMessage('NOT_EXISTS_ENTITY'),
+				"detail"	=> $entity
 			]);
 	}
 
@@ -82,8 +84,8 @@ final class ApiRequestCheck extends ApiStructure {
 	protected function checkEntity($entity) {
 		if(!$this->isEntityExists($entity)) {
 			$this->setError([
-				'text'	=> Loc::getMessage('NOT_EXISTS_ENTITY'),
-				'detail'	=> $entity
+				"text"	=> Loc::getMessage('NOT_EXISTS_ENTITY'),
+				"detail"	=> $entity
 			]);
 		}
 	}
@@ -97,8 +99,8 @@ final class ApiRequestCheck extends ApiStructure {
 	protected function checkMethod($params) {
 		if(!$this->isMethodExists($params))
 			$this->setError([
-				'text'	=> Loc::getMessage('NOT_EXISTS_METHOD'),
-				'detail'	=> $method
+				"text"	=> Loc::getMessage('NOT_EXISTS_METHOD'),
+				"detail"	=> $method
 			]);
 	}
 
@@ -109,10 +111,10 @@ final class ApiRequestCheck extends ApiStructure {
 	*  }
 	*/
 	protected function setError($params) {
-		$this->result['has_error'] = true;
-		$this->result['error_messages'][] = [
-			'text' => $params['text'],
-			'detail' => (isset($params['detail'])) ? $params['detail'] : ''
+		$this->result["has_error"] = true;
+		$this->result["error_messages"][] = [
+			"text" => $params["text"],
+			"detail" => (isset($params["detail"])) ? $params["detail"] : ''
 		];
 	}
 
@@ -120,14 +122,14 @@ final class ApiRequestCheck extends ApiStructure {
 	*	@return bool
 	*/
 	public function hasError() {
-		return $this->result['has_error'];
+		return $this->result["has_error"];
 	}
 
 	/**
 	*	@return array $this->result["error_mesages"] 
 	*/
 	public function getErrors() {
-		return $this->result['error_messages'];
+		return $this->result["error_messages"];
 	}
 
 	/**

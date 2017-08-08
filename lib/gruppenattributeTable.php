@@ -86,7 +86,9 @@ class GroupTable extends DataManager {
 			new StringField('NAME', array(
 				'required' => true,
 			)),
-			new StringField('CODE'), #TODO
+			new StringField('CODE', array(#TODO
+				'required' => true,
+			)),
 			#Инфоблок - группы
 			new IntegerField('IBLOCK_ID', array(
 				'autocpmplate' => false,
@@ -97,7 +99,7 @@ class GroupTable extends DataManager {
 			#Инфоблок - группы
 			new ReferenceField('IBLOCK',
 				'Volex\GruppenAttribute\Iblock',
-				array('=this.ID_BLOCK' => 'ref.ID')
+				array('=this.IBLOCK_ID' => 'ref.ID')
 			),
 				
 		);

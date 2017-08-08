@@ -13,11 +13,14 @@ Loader::registerAutoLoadClasses('gruppenattribute', array(
 	'Volex\GruppenAttribute\SectionGroupTable'		=> 'lib/gruppenattributeTable.php',
 	'Volex\GruppenAttribute\PropertySectionTable'	=> 'lib/gruppenattributeTable.php',
 	
-	'Volex\GruppenAttribute\IBlocks'						=> 'lib/pages.php',
-	'Volex\GruppenAttribute\Groups'						=> 'lib/pages.php',
+	'Volex\GruppenAttribute\Base'							=> 'lib/entities/base.class.php',
+	'Volex\GruppenAttribute\Factory'						=> 'lib/entities/factory.class.php',
+	'Volex\GruppenAttribute\Iblocks'						=> 'lib/entities/iblocks.class.php',
+	'Volex\GruppenAttribute\Groups'						=> 'lib/entities/groups.class.php',
+	'Volex\GruppenAttribute\Sections'					=> 'lib/entities/sections.class.php',
 
-	 'Volex\GruppenAttribute\ApiStructure'				=> 'lib/api_structure.php',
-	 'Volex\GruppenAttribute\ApiRequestCheck'			=> 'lib/api_request_checker.php'
+	'Volex\GruppenAttribute\ApiStructure'				=> 'lib/apiStructure.class.php',
+	'Volex\GruppenAttribute\ApiRequestCheck'			=> 'lib/apiRequestCheck.class.php'
 ));
 
 EventManager::getInstance()->addEventHandler('main', 'OnAfterUserAdd', function(){

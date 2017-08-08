@@ -6,7 +6,7 @@ use Bitrix\Main\Application;
 use Bitrix\Main\Config\Option;
 use Bitrix\Main\Localization\Loc;
 #use Bitrix\Main\Text\String;
-use Volex\GruppenAttribute\IBlock;
+use Volex\GruppenAttribute\Iblocks;
 
 if (!$USER->isAdmin()) {
     $APPLICATION->authForm('Nope');
@@ -57,7 +57,7 @@ $tabControl->begin();
     echo bitrix_sessid_post();
     $tabControl->beginNextTab();
     ?>
-	 <?$page_iblocks = new IBlock;?>
+	 <?$page_iblocks = new Iblocks;?>
     <tr>
         <td width="40%">
             <label for="max_image_size"><?=Loc::getMessage("REFERENCES_MAX_IMAGE_SIZE") ?>:</label>

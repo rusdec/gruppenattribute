@@ -2,7 +2,7 @@
 \Bitrix\Main\Loader::includeModule('gruppenattribute');
 use Volex\GruppenAttribute as VG;
 ?>
-<?$iblocksList = VG\IBlocks::getAll();?>
+<?$iblocksList = VG\Iblocks::getAll();?>
 <?$href = [];?>
 <h1><?= $currentLevel['name']; ?></h1>
 <table>

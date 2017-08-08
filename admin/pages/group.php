@@ -1,26 +1,45 @@
 <?
 \Bitrix\Main\Loader::includeModule('gruppenattribute');
-use Volex\GruppenAttribute as VG;
+use Volex\GruppenAttribute as VGA;
 ?>
-<?$groupsList = VG\Groups::getAll();?>
 <?$currentLevel = $navigation[$_GET['level']]; ?>
-<h1><?= $currentLevel['name']; ?></h1>
+
+<?$groupEntity = new VGA\Groups;?>
+<?$group = $groupEntity->getById($_GET['id']);?>
+
+<?$sectionEntity = new VGA\Properties;?>
+<?$sectionUsedList = $sectionEntity->getUsed();?>
+<?$sectionUnusedList = $sectionEntity->getUnused();?>
+
+<h1><?= $currentLevel['name']; ?> | <?= $group['NAME']; ?></h1>
 <div class="control">
-	<input name="group_name" class="input_control"></input>
+	
+	<select name="iblock_id" rel-type="table-column">
+	<?foreach($sectionUnusedsList as $section) :?>
+		<option value="<?= $section['ID']; ?>"><?= $section['NAME']; ?></option>
+	<?endforeach;?>
+	</select>
+	<input rel-type="table-column" name="name" type="text" class="input_control" placeholder="название" value=""></input>
 	<button class="button_add">+</button>
 </div>
-<div class="header">
-	<h2></h2>
-</div>
+
 <div class="list">
 <table>
-<?foreach($groupsList as $group) :?>
+	<tr>
+		<th>
+			Название
+		</th>
+		<th>
+			Действия
+		</th>
+	</tr>
+<?foreach($sectionUsedList as $section) :?>
 	<tr>
 		<td>
-			<a href="?level=<?= $currentLevel['child'];?>"><?= $group['NAME']; ?></a>
+			<?= $section['NAME']; ?>	
 		</td>
 		<td>
-			<button class="button_del" rel-id="<?= $group['ID'];?>">х</button>
+			<button class="button_del" rel-id="<?= $section['ID'];?>">х</button>
 		</td>
 	</tr>
 <?endforeach;?>

@@ -4,6 +4,8 @@
 
 <?require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admin_after.php';?>
 
+<script src="/local/modules/gruppenattribute/static/jquery-3.2.1.min.js"></script>
+<link rel="stylesheet" href="/local/modules/gruppenattribute/static/style.css">
 <?$navigation = [
 	'iblocks' => [
 		'name'	=> 'Инфоблоки',
@@ -15,7 +17,13 @@
 		'name'	=> 'Группы',
 		'code'	=> 'groups',
 		'parent'	=> NULL,
-		'child'	=> ''
+		'child'	=> 'group'
+	],
+	'group' => [
+		'name'	=> 'Группа',
+		'code'	=> 'group',
+		'parent' => 'groups',
+		'child'	=> 'sections'
 	],
 	'properties' => [
 		'name'	=> 'Свойства',
