@@ -12,6 +12,8 @@ final class Factory {
 			break;
 			case 'iblocks' : return new VGA\Iblocks;
 			break;
+			case 'sections' : return new VGA\Sections;
+			break;
 		}
 	}
 

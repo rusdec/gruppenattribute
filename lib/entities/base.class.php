@@ -17,7 +17,13 @@ class Base {
 		$this->result['has_error'] = true;
 		$this->result['messages'][] = [
 				'text' => $params['text'],
-				'detail' => ''
+				'detail' => $params['detail']
 		];
 	}
+
+	protected function setErrorFalse() {
+		$this->result['has_error'] = false;
+	}
+
+
 }

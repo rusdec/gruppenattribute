@@ -116,7 +116,6 @@ class SectionTable extends DataManager {
 	public static function getMap() {
 		return array(
 			new IntegerField('ID', array(
-					'autocomplete' => true,
 					'primary'		=> true,
 			)),
 			new StringField('NAME',	array(
@@ -148,7 +147,6 @@ class PropertyTable extends DataManager {
 	public static function getMap() {
 		return array(
 			new IntegerField('ID', array(
-				'autocomplete' => true,
 				'primary' => true,
 			)),
 			new StringField('NAME',	array(
