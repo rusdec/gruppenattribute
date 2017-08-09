@@ -19,8 +19,9 @@ use Volex\GruppenAttribute as VGA;
 		<option value="<?= $property['ID']; ?>"><?= $property['NAME']; ?></option>
 	<?endforeach;?>
 	</select>
+	<input rel-type="table-column" name="sort1" type="text" placeholder="сортировка">
 	<input rel-type="table-column" name="section_id" type="hidden" class="input_control" value="<?= $section['ID']; ?>"></input>
-	<button class="button_add">+</button>
+	<button class="button_add fa fa-floppy-o" title="Добавить"></button>
 </div>
 
 <div class="header">
@@ -33,6 +34,9 @@ use Volex\GruppenAttribute as VGA;
 			Название
 		</th>
 		<th>
+			Сорт.
+		</th>
+		<th>
 			Действия
 		</th>
 	</tr>
@@ -42,7 +46,11 @@ use Volex\GruppenAttribute as VGA;
 			<span><?= $property['NAME']; ?></span>
 		</td>
 		<td>
-			<button class="button_del" rel-id="<?= $property['ID'];?>">х</button>
+			<input class="input_sort" size=5 rel-type="table-column-update" name="sort" type="text" value="<?= $property['SORT']; ?>" rel-id="<?= $property['ID'];?>">
+		</td>
+		<td>
+			<button class="button_upd fa fa-floppy-o edited" rel-id="<?= $property['ID'];?>" title="Обновить"></button>
+			<button class="button_del fa fa-remove" rel-id="<?= $property['ID'];?>" title="Удалить"></button>
 		</td>
 	</tr>
 <?endforeach;?>
@@ -51,43 +59,64 @@ use Volex\GruppenAttribute as VGA;
 
 <script>
 	function addElement() {
-		var element = collectData();
+		var element = collectData('[rel-type="table-column"]');
+		element.method = 'add';
+		element.entity = 'properties';
 		sendQuery(element);
-		getList();
+		getElements();
 	}
-	$('button.button_add').on('click', function() {
-		addElement();
-	});
 
 	function deleteElement(id) {
-		section_id = $('input[name="section_id"]').val();
 		sendQuery({
 			method: 'delete',
 			entity: 'properties',
 			input_data: {
 				property_id: id,
-				section_id: section_id	
+				section_id: getSectionId()	
 			}
 		});
 	}
 
+	function updateElement(id) {
+		var element = collectData('[rel-type="table-column-update"][rel-id="'+id+'"]');
+		element.method = 'update';
+		element.entity = 'properies';
+		element.input_data.section_id = getSectionId();
+		element.input_data.property_id = id;
+		console.log(element);
+	//	sendQuery(element);
+		getElements();
+	}
+
+	$('button.button_add').on('click', function() {
+		addElement();
+		location.reload(); <?#todo?>
+	});
+	$('button.button_upd').on('click', function() {
+		updateElement($(this).attr('rel-id'));
+		location.reload(); <?#todo?>
+	});
 	$('button.button_del').on('click', function() {
 		deleteElement($(this).attr('rel-id'));
+		location.reload(); <?#todo?>
 	});
 
-	function collectData() {
+	function getSectionId() {
+		return $('input[name="section_id"]').val();
+	}
+
+	function collectData(selector) {
 		var element = {}
-		element.method = 'add';
-		element.entity = 'properties';
 		element.input_data = {};
-		$('[rel-type="table-column"]').each(function() {
+		$(selector).each(function() {
 			element.input_data[$(this).attr('name')] = $(this).val();
+			console.log($(this).attr('name'), $(this).val());
 		});
 	
 		return element;
 	}
-	
-	function getList() {
+	<?#todo: строить интерфейс до json-данным из гет-запроса?>
+	function getElements() {
 			console.log( sendQuery({
 				method: 'getUsed',
 				entity: 'properties'

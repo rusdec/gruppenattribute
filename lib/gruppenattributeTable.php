@@ -82,18 +82,22 @@ class GroupTable extends DataManager {
 			new IntegerField('ID', array(
  				'autocomplete' => true,
 				'primary' => true,
+				#todo: 'validation'
 			)),
 			new StringField('NAME', array(
 				'required' => true,
+				#todo: 'validation'
 			)),
 			new StringField('CODE', array(#TODO
 				'required' => true,
+				#todo: 'validation'
 			)),
 			#Инфоблок - группы
 			new IntegerField('IBLOCK_ID', array(
 				'autocpmplate' => false,
 				'require' => true,
 				'primary' => true
+				#todo: 'validation'
 			)),
 
 			#Инфоблок - группы
@@ -117,20 +121,24 @@ class SectionTable extends DataManager {
 		return array(
 			new IntegerField('ID', array(
 					'primary'		=> true,
+					#todo: 'validation'
 			)),
 			new StringField('NAME',	array(
 					'require'	=> true
+					#todo: 'validation'
 			)),
 
 			#Связи
 			new ReferenceField('SECTION_TO_GROUP',
 				'Volex\GruppenAttribute\SectionGroup',
+				#todo: 'validation'
 				array('=this.ID' => 'ref.SECTION_ID')
 			),
 			#Пример:
 			#	SectionTable::getList['select' => ['PROPERTY_NAME' => 'SECTION_TO_PROPERTY.PROPERTY.NAME']]
 			new ReferenceField('SECTION_TO_PROPERTY',
 				'Volex\GruppenAttribute\PropertySection',
+				#todo: 'validation'
 				array('=this.ID' => 'ref.SECTION_ID')
 			)
 		);
@@ -148,10 +156,13 @@ class PropertyTable extends DataManager {
 		return array(
 			new IntegerField('ID', array(
 				'primary' => true,
+				#todo: 'validation'
 			)),
 			new StringField('NAME',	array(
-					'require'	=> true
+				'require'	=> true
+				#todo: 'validation'
 			)),
+
 			#Связь Свойство к Раздлелу
 			#Пример:
 			#	PropertyTable::getList['select' => ['SECTION_NAME' => 'PROPERTY_TO_SECTION.SECTION.NAME']]
@@ -215,6 +226,10 @@ class PropertySectionTable extends DataManager {
 			new IntegerField('PROPERTY_ID', array(
 				'autocomplete' => false,
 				'primary' => true,
+			)),
+			new IntegerField('SORT', array(
+				'default_value' => 0,
+				#todo: 'validation'
 			)),
 
 			#Связи

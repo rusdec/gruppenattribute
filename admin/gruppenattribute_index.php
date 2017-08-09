@@ -5,7 +5,8 @@
 <?require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admin_after.php';?>
 
 <script src="/local/modules/gruppenattribute/static/jquery-3.2.1.min.js"></script>
-<link rel="stylesheet" href="/local/modules/gruppenattribute/static/style.css">
+<link rel="stylesheet" href="/local/modules/gruppenattribute/static/css/style.css">
+<link rel="stylesheet" href="/local/modules/gruppenattribute/static/css/font-awesome.min.css">
 <?$navigation = [
 	'iblocks' => [
 		'name'	=> 'Инфоблоки',
@@ -40,7 +41,8 @@
 ]?>
 
 <?if ($navigation[$_GET['level']]['parent'] !== NULL) :?>
-	<a href="?level=<?= $navigation[$_GET['level']]['parent']; ?>">Назад</a>
+	<?$parent_href = (isset($_GET['parent_id'])) ? '&id='.$_GET['parent_id'] : ''?>
+	<a href="?level=<?= $navigation[$_GET['level']]['parent']; ?><?= $parent_href; ?>">Назад</a>
 <?endif;?>
 
 <?require('pages/'.$_GET['level'].'.php');?>

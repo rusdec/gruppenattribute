@@ -20,7 +20,7 @@ use Volex\GruppenAttribute as VGA;
 	<?endforeach;?>
 	</select>
 	<input rel-type="table-column" name="group_id" type="hidden" class="input_control" value="<?= $group['ID']; ?>"></input>
-	<button class="button_add">+</button>
+	<button class="button_add fa fa-floppy-o"></button>
 </div>
 
 <div class="header">
@@ -39,10 +39,10 @@ use Volex\GruppenAttribute as VGA;
 <?foreach($sectionUsedList as $section) :?>
 	<tr>
 		<td>
-			<a href="?level=<?= $currentLevel['child'];?>&id=<?= $section['ID']; ?>"><?= $section['NAME']; ?></a>
+			<a href="?level=<?= $currentLevel['child'];?>&id=<?= $section['ID']; ?>&parent_id=<?= $group['ID'];?>"><?= $section['NAME']; ?></a>
 		</td>
 		<td>
-			<button class="button_del" rel-id="<?= $section['ID'];?>">х</button>
+			<button class="button_del fa fa-remove" rel-id="<?= $section['ID'];?>"></button>
 		</td>
 	</tr>
 <?endforeach;?>

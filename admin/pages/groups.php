@@ -21,7 +21,7 @@ use \Bitrix\Iblock;
 
 	<input rel-type="table-column" name="name" type="text" class="input_control" placeholder="название" value=""></input>
 	<input rel-type="table-column" name="code" type="text" class="input_control" placeholder="код" value=""></input>
-	<button class="button_add">+</button>
+	<button class="button_add fa fa-floppy-o"></button>
 </div>
 <div class="header">
 	<h2>Список групп</h2>
@@ -54,7 +54,7 @@ use \Bitrix\Iblock;
 			<span> <?= $group['IBLOCK_NAME']; ?> </span>
 		</td>
 		<td>
-			<button class="button_del" method="delete" rel-id="<?= $group['ID'];?>">х</button>
+			<button class="button_del fa fa-remove" method="delete" rel-id="<?= $group['ID'];?>"></button>
 		</td>
 	</tr>
 <?endforeach;?>

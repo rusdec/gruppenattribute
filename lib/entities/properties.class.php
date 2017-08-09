@@ -13,6 +13,8 @@ class Properties extends Base {
 			case 'getUsed':
 				return $this->getUsed();
 			break;
+			case 'update':
+			break;
 			case 'add':
 				#Раздел
 				file_put_contents($_SERVER['DOCUMENT_ROOT'].'/sect.log', print_r($params, true));
@@ -65,8 +67,9 @@ class Properties extends Base {
 					]);
 					return $this->getError();
 				}
-
-				$result = $this->linkToSection(['SECTION_ID' => $section['ID'], 'PROPERTY_ID' => $property['ID']]);
+				
+				$sort = (array_key_exists('SORT', $params['input_data'])) ? $params['input_data']['SORT'] : 0;
+				$result = $this->linkToSection(['SECTION_ID' => $section['ID'], 'PROPERTY_ID' => $property['ID'], 'SORT' => $sort]);
 
 				return $result;
 
@@ -133,6 +136,8 @@ class Properties extends Base {
 		$params['select'] = (isset($inputParams['select'])) ? $inputParams['select'] : ['*'];
 		if (isset($inputParams['filter']))
 			$params['filter'] = $inputParams['filter'];
+		if (isset($inputParams['order']))
+			$params['order'] = $inputParams['order'];
 
 		$unfetchedResult = GruppenAttribute\PropertyTable::getList($params);
 
@@ -144,7 +149,11 @@ class Properties extends Base {
 	*	@return array
 	*/
 	public function getLinkedToSectionId($id) {
-		return $this->getUsed(['filter' => ['PROPERTY_TO_SECTION.SECTION_ID' => $id]]);
+		return $this->getUsed([
+			'select'	=> ['SORT'=>'PROPERTY_TO_SECTION.SORT', 'NAME', 'ID'],
+			'filter'	=> ['PROPERTY_TO_SECTION.SECTION_ID' => $id],
+			'order'	=> ['SORT']	
+		]);
 	}
 
 	/**
