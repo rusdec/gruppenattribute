@@ -186,8 +186,9 @@ class Sections extends Base {
 
 		$unfetchedUnused = \Bitrix\Iblock\SectionTable::getList(
 			[
-				'select' => ['ID', 'NAME'],
-				'filter' => ['!=ID' => $used_id]
+				'select'	=> ['ID', 'NAME'],
+				'filter'	=> ['!=ID' => $used_id],
+				'order'	=> ['NAME']
 			]
 		);
 		return $unfetchedUnused->FetchAll();

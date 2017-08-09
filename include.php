@@ -12,6 +12,7 @@ Loader::registerAutoLoadClasses('gruppenattribute', array(
 	'Volex\GruppenAttribute\PropertyTable'				=> 'lib/gruppenattributeTable.php',
 	'Volex\GruppenAttribute\SectionGroupTable'		=> 'lib/gruppenattributeTable.php',
 	'Volex\GruppenAttribute\PropertySectionTable'	=> 'lib/gruppenattributeTable.php',
+	'Volex\GruppenAttribute\PropertySectionGroupTable'	=> 'lib/gruppenattributeTable.php',
 	
 	'Volex\GruppenAttribute\Base'							=> 'lib/entities/base.class.php',
 	'Volex\GruppenAttribute\Factory'						=> 'lib/entities/factory.class.php',

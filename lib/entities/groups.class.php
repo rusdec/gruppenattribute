@@ -27,9 +27,10 @@ class Groups extends Base {
 			case 'add':
 				$iblockId = $params['input_data']['IBLOCK_ID'];
 				$iblockEntity = new GruppenAttribute\Iblocks;
-
+				echo "!1!";
 				$iblock = $iblockEntity->getUsedById($iblockId);
 				if (count($iblock) > 0) {
+					echo "!2!";
 					return $this->add($params['input_data']);
 				} else {
 					$iblock = $iblockEntity->getUnusedById($iblockId);
@@ -40,6 +41,11 @@ class Groups extends Base {
 
 						return $this->add($params['input_data']);
 					} else {
+						echo "!5!";
+						$this->setError([
+							'text' => 'Инфоблок не существует',
+							'detail' => 'iblock_id='.$params['input_data']['IBLOCK_ID']
+						]);
 						#ошибка. Нет такого инфоблока
 					}
 				}
@@ -101,7 +107,17 @@ class Groups extends Base {
 	*	@return int|bool
 	*/
 	public function add($params) {
-		return GruppenAttribute\GroupTable::add($params);
+		var_dump($params);
+		$this->setErrorFalse();
+		$result = GruppenAttribute\GroupTable::add($params);
+		if ($result->isSuccess()) {
+			$this->result['ID'] = $result->getId();
+			return $this->result;
+
+		} else {
+			$this->setError(['text' => $result->getErrorMessages(), 'detail' => $params]);
+			return $this->result;
+		}
 	}
 
 	/**
@@ -109,6 +125,7 @@ class Groups extends Base {
 	*	@return bool
 	*/
 	public function delete($id) {
+		
 		return GruppenAttribute\GroupTable::delete($id);
 	}
 

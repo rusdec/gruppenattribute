@@ -59,7 +59,7 @@ final class ApiRequestCheck extends ApiStructure {
 		foreach($this->getFields() as $field => $properties) {
 			if($properties['require'] && !array_key_exists($field, $this->request)) {
 				$this->setError([
-					"text"	=> Loc::getMessage('NOT_EXISTS_REQUIRE_FIELD'),
+					"text"	=> Loc::getMessage('NOT_EXISTS_REQUIRE_FIELD')."ss",
 					"detail"	=> $field
 				]);
 				continue;
@@ -71,6 +71,7 @@ final class ApiRequestCheck extends ApiStructure {
 	*	@param string $field
 	*/
 	protected function checkField($field) {
+		$this->setNoError();
 		if(!isset($this->fields[$field]))	
 			$this->setError([
 				"text"	=> Loc::getMessage('NOT_EXISTS_ENTITY'),
@@ -82,6 +83,7 @@ final class ApiRequestCheck extends ApiStructure {
 	*	@param string $entity
 	*/
 	protected function checkEntity($entity) {
+		$this->setNoError();
 		if(!$this->isEntityExists($entity)) {
 			$this->setError([
 				"text"	=> Loc::getMessage('NOT_EXISTS_ENTITY'),
@@ -97,11 +99,16 @@ final class ApiRequestCheck extends ApiStructure {
 	*  }
 	*/
 	protected function checkMethod($params) {
+		$this->setNoError();
 		if(!$this->isMethodExists($params))
 			$this->setError([
 				"text"	=> Loc::getMessage('NOT_EXISTS_METHOD'),
 				"detail"	=> $method
 			]);
+	}
+
+	protected function setNoError() {
+		$this->result["has_error"] = false;
 	}
 
 	/**
@@ -114,7 +121,7 @@ final class ApiRequestCheck extends ApiStructure {
 		$this->result["has_error"] = true;
 		$this->result["error_messages"][] = [
 			"text" => $params["text"],
-			"detail" => (isset($params["detail"])) ? $params["detail"] : ''
+			"detail" => (array_key_exists('detail', $params)) ? $params["detail"] : ''
 		];
 	}
 

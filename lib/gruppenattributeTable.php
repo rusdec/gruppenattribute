@@ -105,6 +105,14 @@ class GroupTable extends DataManager {
 				'Volex\GruppenAttribute\Iblock',
 				array('=this.IBLOCK_ID' => 'ref.ID')
 			),
+			new ReferenceField('GROUP_TO_SECTION',
+				'Volex\GruppenAttribute\SectionGroup',
+				array('=this.ID' => 'ref.GROUP_ID')
+			),
+			new ReferenceField('GROUP_TO_PROPERTY',
+				'Volex\GruppenAttribute\PropertyGroup',
+				array('=this.ID' => 'ref.GROUP_ID')
+			)
 				
 		);
 	}
@@ -131,14 +139,12 @@ class SectionTable extends DataManager {
 			#Связи
 			new ReferenceField('SECTION_TO_GROUP',
 				'Volex\GruppenAttribute\SectionGroup',
-				#todo: 'validation'
 				array('=this.ID' => 'ref.SECTION_ID')
 			),
 			#Пример:
 			#	SectionTable::getList['select' => ['PROPERTY_NAME' => 'SECTION_TO_PROPERTY.PROPERTY.NAME']]
 			new ReferenceField('SECTION_TO_PROPERTY',
 				'Volex\GruppenAttribute\PropertySection',
-				#todo: 'validation'
 				array('=this.ID' => 'ref.SECTION_ID')
 			)
 		);
@@ -163,11 +169,8 @@ class PropertyTable extends DataManager {
 				#todo: 'validation'
 			)),
 
-			#Связь Свойство к Раздлелу
-			#Пример:
-			#	PropertyTable::getList['select' => ['SECTION_NAME' => 'PROPERTY_TO_SECTION.SECTION.NAME']]
-			new ReferenceField('PROPERTY_TO_SECTION',
-				'Volex\GruppenAttribute\PropertySection',
+			new ReferenceField('PROPERTY_TO_PROPERTY_SECTION_GROUP',
+				'Volex\GruppenAttribute\PropertySectionGroup',
 				array('=this.ID' => 'ref.PROPERTY_ID')
 			)
 		);
@@ -187,6 +190,11 @@ class SectionGroupTable extends DataManager {
 
 	public static function getMap() {
 		return array(
+			new IntegerField('ID', array(
+				'autocomplete' => true,
+				'primary' => true,
+			)),
+
 			new IntegerField('GROUP_ID', array(
 				'autocomplete' => false,
 				'primary' => true,
@@ -210,37 +218,37 @@ class SectionGroupTable extends DataManager {
 	}
 }
 
-#Свойства к Разделам
-class PropertySectionTable extends DataManager {
+#Свойства к Группам 
+class PropertySectionGroupTable extends DataManager {
 	public static function getTableName() {
 		$prefix = \Volex\GruppenAttribute\TablePrefix::getPrefix();
-		return $prefix.'property_to_section';
+		return $prefix.'property_to_section_group';
 	}
 
 	public static function getMap() {
-		return array(
-			new IntegerField('SECTION_ID', array(
-				'autocomplete' => false,
-				'primary' => true,
-			)),
-			new IntegerField('PROPERTY_ID', array(
-				'autocomplete' => false,
-				'primary' => true,
-			)),
-			new IntegerField('SORT', array(
-				'default_value' => 0,
-				#todo: 'validation'
-			)),
-
-			#Связи
-			new ReferenceField('SECTION',
-				'Volex\GruppenAttribute\Section',
-				array('=this.SECTION_ID' => 'ref.ID')
-			),
-			new ReferenceField('PROPERTY',
-				'Volex\GruppenAttribute\Property',
-				array('=this.PROPERTY_ID' => 'ref.ID')
-			)
-		);
+	return array(
+		new IntegerField('ID', array(
+			'autocomplete' => true,
+			'primary' => true,
+		)),
+		new IntegerField('SECTION_GROUP_ID', array(
+			'autocomplete' => false,
+		)),
+		new IntegerField('PROPERTY_ID', array(
+			'autocomplete' => false,
+		)),
+		new IntegerField('SORT', array(
+			'default' => 0
+		)),
+		#Связи
+		new ReferenceField('SECTION_GROUP',
+			'Volex\GruppenAttribute\SectionGroup',
+			array('=this.SECTION_GROUP_ID' => 'ref.ID')
+		),
+		new ReferenceField('PROPERTY',
+			'Volex\GruppenAttribute\Property',
+			array('=this.PROPERTY_ID' => 'ref.ID')
+		)
+	);
 	}
 }

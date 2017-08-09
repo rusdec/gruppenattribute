@@ -53,7 +53,7 @@ class GruppenAttribute extends CModule
     public function doInstall() {
         ModuleManager::registerModule($this->MODULE_ID);
         $this->installDB();
-		  $this->installDemoData();
+		  #$this->installDemoData();
     }
 
     public function doUninstall() {
@@ -68,7 +68,8 @@ class GruppenAttribute extends CModule
            vGA\SectionTable::getEntity()->createDbTable();
            vGA\PropertyTable::getEntity()->createDbTable();
            vGA\SectionGroupTable::getEntity()->createDbTable();
-           vGA\PropertySectionTable::getEntity()->createDbTable();
+     #      vGA\PropertySectionTable::getEntity()->createDbTable();
+           vGA\PropertySectionGroupTable::getEntity()->createDbTable();
         }
     }
 
@@ -80,7 +81,8 @@ class GruppenAttribute extends CModule
             $connection->dropTable(vGA\SectionTable::getTableName());
             $connection->dropTable(vGA\PropertyTable::getTableName());
             $connection->dropTable(vGA\SectionGroupTable::getTableName());
-            $connection->dropTable(vGA\PropertySectionTable::getTableName());
+            #$connection->dropTable(vGA\PropertySectionTable::getTableName());
+            $connection->dropTable(vGA\PropertySectionGroupTable::getTableName());
         }
     }
 

@@ -11,72 +11,51 @@ class Properties extends Base {
 	public function callMethod($params) {
 		switch ($params['method']) {
 			case 'getUsed':
-				return $this->getUsed();
 			break;
 			case 'update':
-			break;
-			case 'add':
-				#Раздел
-				file_put_contents($_SERVER['DOCUMENT_ROOT'].'/sect.log', print_r($params, true));
-				$sectionId = $params['input_data']['SECTION_ID'];
-				$sectionEntity = new GruppenAttribute\Sections;
-				#раздел не существует?
-				if(!$sectionEntity->isUnusedExists($sectionId)) {
-					#вернуть ошибку
-					$this->setError([
-						'text' => 'Раздел не существует',
-						'detail' => 'id='.$section
-					]);
-					return $this->getError();
-				}
-				#раздел не в используемом?
-				$section = $sectionEntity->getUnusedById($sectionId);
-				if(!$sectionEntity->isUsedExists($sectionId)) {
-					$result = $sectionEntity->add(['ID' => $section['ID'], 'NAME' => $section['NAME']]);
-					if($result['has_error'])
-						return $result;
-				}
-
-				#Свойство
-				$propertyId = $params['input_data']['PROPERTY_ID'];
-
-					#свойство не существует?
-				if(!$this->isUnusedExists($propertyId)) {
-					$this->setError([
-						'text' => 'Свойство не существует',
-						'detail' => 'id='.$propertyId
-					]);
-					return $this->getError();
-				}
-				$property = $this->getUnusedById($propertyId);
-
-					#свойство не в используемых?
-				if(!$this->isUsedExists($propertyId)) {
-					#добавить
-					$result = $this->add(['ID' => $propertyId, 'NAME' => $property['NAME']]);
-					if ($result['has_error'])
-						return $result;
-				}
-				$property = $this->getUsedById($propertyId);
-
-					#раздел уже связан с группой?
-				if($this->hasRelationWithSection(['SECTION_ID' => $sectionId, 'PROPERTY_ID' => $propertyId])) {
-					$this->setError([
-						'text' => 'Уже связаны',
-						'detail' => 'section_id='.$sectionId.' <-> '.'property_id='.$propertyId
-					]);
-					return $this->getError();
-				}
-				
-				$sort = (array_key_exists('SORT', $params['input_data'])) ? $params['input_data']['SORT'] : 0;
-				$result = $this->linkToSection(['SECTION_ID' => $section['ID'], 'PROPERTY_ID' => $property['ID'], 'SORT' => $sort]);
-
-				return $result;
-
+				$id = $params['input_data']['LINK_ID'];
+				unset($params['input_data']['LINK_ID']);
+				return $this->update($id, ['SORT' => $params['input_data']['SORT']]);
 			break;
 			case 'delete':
-				file_put_contents($_SERVER['DOCUMENT_ROOT'].'/prop.log', print_r($params, true));
-				return $this->delete($params['input_data']);
+				$result = $this->delete($params['input_data']);
+				return $result;
+			break;
+			case 'add':
+				$propertyId = $params['input_data']['PROPERTY_ID'];
+				if (!$this->isUsedExists($propertyId)) {
+					if(!$this->isUnusedExists($propertyId)) {
+						$this->setError([
+							'text' => 'Свойство не существует',
+							'detail' => 'property_id='.$propertyId
+						]);
+					}
+					$property = $this->getUnusedById($propertyId);
+					$result = $this->add([
+						'ID' => $property['ID'],
+						'NAME' => $property['NAME']
+					]);
+					if ($this->hasError())
+						return $result;
+				}
+				
+				$sectionGroupId = $this->helperGetSectionGroupId([
+					'GROUP_ID' => $params['input_data']['GROUP_ID'],
+					'SECTION_ID'=> $params['input_data']['SECTION_ID']
+				]);
+
+				if($this->hasError())
+					return $this->getError();
+
+				$params['input_data'] = [
+					'SECTION_GROUP_ID' => $sectionGroupId,
+					'SORT' => $params['input_data']['SORT'],
+					'PROPERTY_ID' => $propertyId
+				];
+				$result = $this->linkToPropertySectionGroup($params['input_data']);
+					
+				return $result;
+
 			break;
 		}
 	}
@@ -100,8 +79,11 @@ class Properties extends Base {
 	*	@return array
 	*/
 	public function getUsedById($id) {
-		$src = $this->getUsed(['filter'=>['ID'=>$id]]);
-		return (isset($src[0])) ? $src[0] : $src;
+		$unfetchedResult = GruppenAttribute\PropertyTable::getList([
+			'select' => ['*'],
+			'filter' => ['ID' => $id]
+		]);
+		return $unfetchedResult->FetchAll();
 	}
 
 	/**
@@ -133,48 +115,94 @@ class Properties extends Base {
 	*	@return array
 	*/
 	public function getUsed($inputParams) {
-		$params['select'] = (isset($inputParams['select'])) ? $inputParams['select'] : ['*'];
-		if (isset($inputParams['filter']))
+		#SELECT
+		if(!array_key_exists('select', $inputParams)) {
+			$params['select'] = [
+					'P_ID' => 'PROPERTY.ID',
+					'P_NAME' => 'PROPERTY.NAME',
+					'LINK_ID' => 'ID',
+					'SORT' => 'SORT',
+			];
+		}
+
+		#FILTER
+		if (array_key_exists('filter',$inputParams)) {
 			$params['filter'] = $inputParams['filter'];
-		if (isset($inputParams['order']))
-			$params['order'] = $inputParams['order'];
+		}
 
-		$unfetchedResult = GruppenAttribute\PropertyTable::getList($params);
+		#ORDER
+		$params['order'] = (array_key_exists('order', $inputParams)) ? $inputParam['order'] : ['SORT'];
 
-		return $unfetchedResult->FetchAll();
+		$unfetchedResult = GruppenAttribute\PropertySectionGroupTable::getList($params);
+
+		$fetchedResult = [];
+		while($property = $unfetchedResult->Fetch()) {
+
+			$fetchedResult[] = [
+				'ID' => $property['P_ID'],
+				'NAME' => $property['P_NAME'],
+				'LINK_ID' => $property['LINK_ID'],
+				'SORT' => $property['SORT']
+			];
+		}
+
+		return $fetchedResult;
 	}
 
 	/**
 	*	@param int $id
 	*	@return array
 	*/
-	public function getLinkedToSectionId($id) {
+	public function getLinkedToSectionId($params) {
 		return $this->getUsed([
-			'select'	=> ['SORT'=>'PROPERTY_TO_SECTION.SORT', 'NAME', 'ID'],
-			'filter'	=> ['PROPERTY_TO_SECTION.SECTION_ID' => $id],
-			'order'	=> ['SORT']	
+			'filter' => [
+				'SECTION_GROUP.GROUP_ID' => $params['GROUP_ID'],
+				'SECTION_GROUP.SECTION_ID' => $params['SECTION_ID']
+			]	
 		]);
 	}
 
 	/**
-	*	@param int $id
+	*	@param array $params {
+	*		@option int "GROUP_ID"
+	*		@option int "SECTION_ID"
+	*	}
+	*	@return int
+	*/
+	protected function getSectionGroupId($params) {
+		$unfetchedResult = GruppenAttribute\SectionGroupTable::getList([
+			'select' => ['ID'],
+			'filter' => $params
+		]);
+
+		$fetchedResult = $unfetchedResult->FetchAll();
+
+		return $fetchedResult[0]['ID'];
+	}
+
+	/**
+	*	@param array $params {
+	*		@option int "GROUP_ID"
+	*		@option int "SECTION_ID"
+	*	}
 	*	@return array
 	*/
-	public function getUnlinkedToSectionId($id) {
-		$used_id = $this->getUsed(['select' => ['ID'], 'filter' => ['PROPERTY_TO_SECTION.SECTION_ID' => $id]]);
-		$ids = [];
-		foreach($used_id as $id) {
-			$ids[] = $id['ID'];
+	public function getUnlinkedToSectionId($params) {
+		$linkedElements = $this->getLinkedToSectionId($params);
+
+		$linkedIds = [];
+		foreach($linkedElements as $linkedElement) {
+			$linkedIds[] = $linkedElement['ID'];
 		}
-		if (count($ids) == 0)
+		if (count($linkedIds) == 0)
 			$filter = '';
 		else
-			$filter = ['filter' => ['!@ID' => $ids]]; 
-
+			$filter = ['filter' => ['!@ID' => $linkedIds]]; 
 		return $this->getUnused($filter);
 	}
 
 	/**
+	*	@param array
 	*	@return array
 	*/
 	public function getUnused($inputParams) {
@@ -208,17 +236,22 @@ class Properties extends Base {
 		);
 		return $unfetchedUnused->FetchAll();
 	}
-
 	
 	/**
 	*	@param int
 	*	@return bool
 	*/
 	public function delete($params) {
-		return GruppenAttribute\PropertySectionTable::delete([
-			'SECTION_ID' => $params['SECTION_ID'],
-			'PROPERTY_ID'	=> $params['PROPERTY_ID']
-		]);
+		#todo откат rollback
+		$this->setErrorFalse();
+		$result = GruppenAttribute\PropertySectionGroupTable::delete($params);
+		if(!$result->isSuccess())
+			$this->setError([
+				'text' => 'Ошибка при удалении привязки свойства',
+				'detail' => $params
+			]);
+		
+		return $this->getError();
 	}
 
 	/**
@@ -226,11 +259,40 @@ class Properties extends Base {
 	*		@option int "ID_GROUP"
 	*		@option int "IG_SECTION"
 	*	}
-	*	@return boolean
+	*	@return array|int
 	*/
-	public function linkToSection($params) {
+	protected function helperGetSectionGroupId($params) {
 		$this->setErrorFalse();
-		$result = GruppenAttribute\PropertySectionTable::add($params);
+		$unfetchedResult = GruppenAttribute\SectionGroupTable::getList([
+			'select' => ['ID'],
+			'filter' => $params
+		]);
+		$src_data = $unfetchedResult->FetchAll();
+		
+		if (!isset($src_data[0]['ID'])) {
+			$this->setError([
+				'text' => 'Раздел не прикреплён к группе',
+				'detail' => $params
+			]);
+			return $this->result;
+		}
+
+		return $src_data[0]['ID']; 
+	}
+
+	/**
+	*	@param array $params {
+	*		@option int "SECTION_GROUP_ID"
+	*		@option int "PROPERTY_ID"
+	*		@option int "SORT"
+	*	}
+	*	@return array
+	*/
+	public function linkToPropertySectionGroup($params) {
+		$this->setErrorFalse();
+
+		$unfetchedSectionGroupId = GruppenAttributes;
+		$result = GruppenAttribute\PropertySectionGroupTable::add($params);
 
 		if ($result->isSuccess()) 
 			$this->result['id'] = $result->getId();
@@ -266,5 +328,23 @@ class Properties extends Base {
 		
 		return $this->result;
 	}
+	
+	/**
+	*	@param int $id
+	*	@param array $params
+	*
+	*	@return array $this->result
+	*/
+	public function update($id, $params) {
+		$this->setErrorFalse();
+		$result = GruppenAttribute\PropertySectionGroupTable::update($id,$params);
 
+		if(!$result->isSuccess())
+			$this->setError([
+				'text' => $result->getErrorMessages(),
+				'detail' => $params
+			]);
+
+		return $this->result;
+	}
 }

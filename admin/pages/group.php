@@ -39,7 +39,7 @@ use Volex\GruppenAttribute as VGA;
 <?foreach($sectionUsedList as $section) :?>
 	<tr>
 		<td>
-			<a href="?level=<?= $currentLevel['child'];?>&id=<?= $section['ID']; ?>&parent_id=<?= $group['ID'];?>"><?= $section['NAME']; ?></a>
+			<a href="?level=<?= $currentLevel['child'];?>&id=<?= $section['ID']; ?>&parent_id=<?= $group['ID'];?>&group_id=<?= $group['ID']; ?>"><?= $section['NAME']; ?></a>
 		</td>
 		<td>
 			<button class="button_del fa fa-remove" rel-id="<?= $section['ID'];?>"></button>

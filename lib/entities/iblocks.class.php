@@ -8,6 +8,22 @@ use Volex\GruppenAttribute;
 
 class Iblocks extends Base {
 
+	public function callMethod($params) {
+		switch ($params['method']) {
+			case 'add':
+				return $this->add($params['input_data']);
+			break;
+
+			case 'delete':
+				return $this->delete($params['input_data']);
+			break;
+
+			default:
+				$this->setError(['text' => 'Метод не найден.', 'detail' => $params['method']]);
+				return $this->result;
+			break;
+		}
+	}
 	/**
 	*	@return array
 	*/
@@ -56,7 +72,8 @@ class Iblocks extends Base {
 		$params['select'] = (isset($inputParams['select'])) ? $inputParams['select'] : ['ID', 'NAME'];
 		if (isset($inputParams['filter']))
 			$params['filter'] = $inputParams['filter'];
-		
+
+		$params['order'] = ['NAME'];
 		$unfetchedResult = \Bitrix\Iblock\IblockTable::getList($params);
 
 		return $unfetchedResult->FetchAll();
@@ -82,12 +99,24 @@ class Iblocks extends Base {
 	}
 
 	public function add($params) {
+		$this->setErrorFalse();
 		$result = GruppenAttribute\IblockTable::add($params);
+		if ($result->isSuccess()) {
+			$this->result['ID'] = $result->getId();
+			return $this->result;
+
+		} else {
+			$this->setError(['text' => $result->getErrorMessages(), 'detail' => $params]);
+			return $this->result;
+		}
+	}
+
+	public function delete($params) {
+		$this->setErrorFalse();
+		$result = GruppenAttribute\IblockTable::delete($params);
 
 		if ($result->isSuccess()) {
-			$this->result['has_error'] = false;
-			return $result->getId();
-
+			return $this->result;
 		} else {
 			$this->setError(['text' => $result->getErrorMessages(), 'detail' => $params]);
 			return $this->result;
