@@ -254,6 +254,7 @@ class Properties extends Base {
 		return $this->getError();
 	}
 
+
 	/**
 	*	@param array $params {
 	*		@option int "ID_GROUP"

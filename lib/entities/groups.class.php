@@ -18,7 +18,8 @@ class Groups extends Base {
 
 		return $unfetchedResult->FetchAll();
 	}
-	
+
+
 	public function callMethod($params) {
 		switch ($params['method']) {
 			case 'getAll':
@@ -107,7 +108,6 @@ class Groups extends Base {
 	*	@return int|bool
 	*/
 	public function add($params) {
-		var_dump($params);
 		$this->setErrorFalse();
 		$result = GruppenAttribute\GroupTable::add($params);
 		if ($result->isSuccess()) {
