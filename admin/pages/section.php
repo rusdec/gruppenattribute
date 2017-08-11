@@ -27,14 +27,15 @@ use Volex\GruppenAttribute as VGA;
 	<input rel-type="table-column" name="sort" type="text" placeholder="сортировка">
 	<input rel-type="table-column-position" name="section_id" type="hidden" class="input_control" value="<?= $section['ID']; ?>"></input>
 	<input rel-type="table-column-position" name="group_id" type="hidden" class="input_control" value="<?= $group['ID']; ?>"></input>
-	<button class="button_add fa fa-floppy-o" title="Добавить"></button>
+	<button class="button_add fa fa-floppy-o btn btn-success" title="Добавить"></button>
 </div>
 
 <div class="header">
 	<h2>Прикреплённые свойства</h2>
 </div>
-<div class="list">
-<table class="std_table">
+<div>
+<table class="table table-bordered table-striped table-hover" id="datatable">
+	<thead>
 	<tr>
 		<th>
 			Название
@@ -46,21 +47,24 @@ use Volex\GruppenAttribute as VGA;
 			Действия
 		</th>
 	</tr>
+	</thead>
+	<tbody>
 <?foreach($propertyUsedList as $property) :?>
 	<tr>
 		<td>
 			<span><?= $property['NAME']; ?></span>
 		</td>
-		<td>
+		<td class="td_center">
 			<input class="input_sort" size=5 rel-type="table-column-update" name="sort" type="text" value="<?= $property['SORT']; ?>" rel-id="<?= $property['ID'];?>">
 			<input type="hidden" rel-type="table-column-update" name="link_id" value="<?= $property['LINK_ID']; ?>" rel-id="<?= $property['ID'];?>">
 		</td>
-		<td>
-			<button class="button_upd fa fa-floppy-o edited" rel-id="<?= $property['ID'];?>" title="Обновить"></button>
-			<button class="button_del fa fa-remove" rel-id="<?= $property['LINK_ID'];?>" title="Удалить"></button>
+		<td class="td_center">
+			<button class="button_upd fa fa-floppy-o edited btn btn-info" rel-id="<?= $property['ID'];?>" title="Обновить"></button>
+			<button class="button_del fa fa-remove btn btn-danger" rel-id="<?= $property['LINK_ID'];?>" title="Удалить"></button>
 		</td>
 	</tr>
 <?endforeach;?>
+	</tbody>
 </table>
 </div>
 

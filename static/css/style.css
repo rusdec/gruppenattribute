@@ -6,7 +6,11 @@
 	padding: 10px;
 }
 
-button {
+td.td_center {
+	text-align: center;
+}
+
+.admin_button {
 	cursor: pointer;
 	padding: 10px;
 	border-radius: 5px;
@@ -15,7 +19,8 @@ button {
 	margin-left: 5px;
 }
 
-button:hover {
+
+.admin_button:hover {
 	opacity: 0.7;
 }
 

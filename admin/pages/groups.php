@@ -21,13 +21,14 @@ use \Bitrix\Iblock;
 
 	<input rel-type="table-column" name="name" type="text" class="input_control" placeholder="название" value=""></input>
 	<input rel-type="table-column" name="code" type="text" class="input_control" placeholder="код" value=""></input>
-	<button class="button_add fa fa-floppy-o"></button>
+	<button class="button_add fa fa-floppy-o btn btn-success"></button>
 </div>
 <div class="header">
 	<h2>Список групп</h2>
 </div>
 <div class="list">
-<table class="std_table">
+<table class="std_table table table-bordered table-striped table-hover" id="datatable">
+	<thead>
 	<tr>
 		<th>
 			Название
@@ -42,6 +43,8 @@ use \Bitrix\Iblock;
 			Действия
 		</th>
 	</tr>
+	</thead>
+	<tbody>
 <?foreach($groupsList as $group) :?>
 	<tr>
 		<td>
@@ -53,11 +56,12 @@ use \Bitrix\Iblock;
 		<td>
 			<span> <?= $group['IBLOCK_NAME']; ?> </span>
 		</td>
-		<td>
-			<button class="button_del fa fa-remove" method="delete" rel-id="<?= $group['ID'];?>"></button>
+		<td class="td_center">
+			<button class="button_del fa fa-remove btn btn-danger" method="delete" rel-id="<?= $group['ID'];?>"></button>
 		</td>
 	</tr>
 <?endforeach;?>
+	</tbody>
 </table>
 </div>
 

@@ -6,6 +6,7 @@ use Volex\GruppenAttribute as VG;
 <?$href = [];?>
 <h1><?= $currentLevel['name']; ?></h1>
 <table>
+	<tbody>
 <?foreach($iblocksList as $iblock) :?>
 	<?$href['level'] = 'level='.$navigation[$_GET['level']]['child'];?>
 	<?$href['iblock_id'] = 'iblock_id='.$iblock['ID']?>
@@ -14,5 +15,6 @@ use Volex\GruppenAttribute as VG;
 			<a href="?<?= implode('&', $href) ?>"><?= $iblock['NAME']; ?></a>
 		</td>
 	</tr>
+	</tbody>
 <?endforeach;?>
 </table>

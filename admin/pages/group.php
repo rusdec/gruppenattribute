@@ -16,36 +16,46 @@ use Volex\GruppenAttribute as VGA;
 	
 	<select name="section_id" rel-type="table-column">
 	<?foreach($sectionUnusedList as $section) :?>
-		<option value="<?= $section['ID']; ?>"><?= $section['NAME']; ?></option>
+		<option value="<?= $section['ID']; ?>"><?= $section['NAME']; ?> | (<?=$section['ID']; ?>)</option>
 	<?endforeach;?>
 	</select>
 	<input rel-type="table-column" name="group_id" type="hidden" class="input_control" value="<?= $group['ID']; ?>"></input>
-	<button class="button_add fa fa-floppy-o"></button>
+	<button class="button_add fa fa-floppy-o btn btn-success"></button>
 </div>
 
 <div class="header">
 	<h2>Список разделов</h2>
 </div>
 <div class="list">
-<table class="std_table">
+<table class="std_table table table-bordered table-striped table-hover" id="datatable">
+	<thead>
 	<tr>
+		<th>
+			ID
+		</th>
 		<th>
 			Название
 		</th>
-		<th>
+		<th class="td_center">
 			Действия
 		</th>
 	</tr>
+	</thead>
+	<tbody>
 <?foreach($sectionUsedList as $section) :?>
 	<tr>
 		<td>
-			<a href="?level=<?= $currentLevel['child'];?>&id=<?= $section['ID']; ?>&parent_id=<?= $group['ID'];?>&group_id=<?= $group['ID']; ?>"><?= $section['NAME']; ?></a>
+			<span><?= $section['ID']; ?></span>
 		</td>
 		<td>
-			<button class="button_del fa fa-remove" rel-id="<?= $section['ID'];?>"></button>
+			<a href="?level=<?= $currentLevel['child'];?>&id=<?= $section['ID']; ?>&parent_id=<?= $group['ID'];?>&group_id=<?= $group['ID']; ?>"><?= $section['NAME']; ?></a>
+		</td>
+		<td class="td_center">
+			<button class="button_del fa fa-remove btn btn-danger" rel-id="<?= $section['ID'];?>"></button>
 		</td>
 	</tr>
 <?endforeach;?>
+	</tbody>
 </table>
 </div>
 
