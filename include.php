@@ -13,7 +13,7 @@ Loader::registerAutoLoadClasses('gruppenattribute', array(
 	'Volex\GruppenAttribute\SectionGroupTable'		=> 'lib/gruppenattributeTable.php',
 	'Volex\GruppenAttribute\PropertySectionTable'	=> 'lib/gruppenattributeTable.php',
 	'Volex\GruppenAttribute\PropertySectionGroupTable'	=> 'lib/gruppenattributeTable.php',
-	
+		
 	'Volex\GruppenAttribute\Base'							=> 'lib/entities/base.class.php',
 	'Volex\GruppenAttribute\Factory'						=> 'lib/entities/factory.class.php',
 
@@ -21,6 +21,8 @@ Loader::registerAutoLoadClasses('gruppenattribute', array(
 	'Volex\GruppenAttribute\Iblocks'						=> 'lib/entities/iblocks.class.php',
 	'Volex\GruppenAttribute\Sections'					=> 'lib/entities/sections.class.php',
 	'Volex\GruppenAttribute\Properties'					=> 'lib/entities/properties.class.php',
+	'Volex\GruppenAttribute\SectionsGroups'			=> 'lib/entities/section_to_group.class.php',
+	'Volex\GruppenAttribute\PropertiesSectionsGroups'	=> 'lib/entities/property_to_section_group.class.php',
 
 
 	'Volex\GruppenAttribute\ApiStructure'				=> 'lib/apiStructure.class.php',
