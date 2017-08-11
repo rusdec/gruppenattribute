@@ -129,6 +129,7 @@ class Sections extends Base {
 		if (isset($inputParams['filter']))
 			$params['filter'] = $inputParams['filter'];
 
+		$parma['order'] = (array_key_exists('order', $inputParams)) ? $inputParams['order'] : ['NAME'];
 		$unfetchedResult = GruppenAttribute\SectionTable::getList($params);
 
 		return $unfetchedResult->FetchAll();
@@ -168,7 +169,8 @@ class Sections extends Base {
 		$params['select'] = (isset($inputParams['select'])) ? $inputParams['select'] : ['ID', 'NAME'];
 		if (array_key_exists('filter', $inputParams))
 			$params['filter'] = $inputParams['filter'];
-		
+	
+		$params['order'] = (array_key_exists('order', $inputParams)) ? $inputParams['order'] : ['NAME'];	
 		$unfetchedResult = \Bitrix\Iblock\SectionTable::getList($params);
 
 		return $unfetchedResult->FetchAll();
