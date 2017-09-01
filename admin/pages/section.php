@@ -38,6 +38,9 @@ use Volex\GruppenAttribute as VGA;
 	<thead>
 	<tr>
 		<th>
+			ID
+		</th>
+		<th>
 			Название
 		</th>
 		<th>
@@ -51,6 +54,9 @@ use Volex\GruppenAttribute as VGA;
 	<tbody>
 <?foreach($propertyUsedList as $property) :?>
 	<tr>
+		<td>
+			<span><?= $property['ID']; ?></span>
+		</td>
 		<td>
 			<span><?= $property['NAME']; ?></span>
 		</td>

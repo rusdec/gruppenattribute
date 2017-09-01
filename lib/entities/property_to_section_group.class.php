@@ -22,7 +22,7 @@ class PropertiesSectionsGroups extends Base {
 	/**
 	*	@return array
 	*/
-	public static function get($params) {
+	public static function get($inputParams) {
 		$params['select'] = (isset($inputParams['select'])) ? $inputParams['select'] : ['*'];
 		if (isset($inputParams['filter']))
 			$params['filter'] = $inputParams['filter'];

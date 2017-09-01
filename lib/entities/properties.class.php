@@ -291,8 +291,10 @@ class Properties extends Base {
 	*/
 	public function linkToPropertySectionGroup($params) {
 		$this->setErrorFalse();
-
-		$unfetchedSectionGroupId = GruppenAttributes;
+		
+		if (!isset($params['SORT']) || (isset($params['SORT']) && $params['SORT'] === NULL))
+			$params['SORT'] = 0;
+			
 		$result = GruppenAttribute\PropertySectionGroupTable::add($params);
 
 		if ($result->isSuccess()) 
