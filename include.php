@@ -24,6 +24,7 @@ Loader::registerAutoLoadClasses('gruppenattribute', array(
 	'Volex\GruppenAttribute\SectionsGroups'			=> 'lib/entities/section_to_group.class.php',
 	'Volex\GruppenAttribute\PropertiesSectionsGroups'	=> 'lib/entities/property_to_section_group.class.php',
 
+	'Volex\GruppenAttribute\Utilities'					=>	'lib/entities/utilities.class.php',
 
 	'Volex\GruppenAttribute\ApiStructure'				=> 'lib/apiStructure.class.php',
 	'Volex\GruppenAttribute\ApiRequestCheck'			=> 'lib/apiRequestCheck.class.php'
