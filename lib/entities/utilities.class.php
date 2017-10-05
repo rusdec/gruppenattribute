@@ -23,15 +23,8 @@ class Utilities {
 			return false;
 		}
 
-		$group_id = GruppenAttribute\Utilities::gp_get_group_id_by_code($params['group_code']);
-		$section_id = GruppenAttribute\Utilities::get_section_id_by_code([
-			'section_code' => $params['section_code'],
-			'iblock_id' => $params['iblock_id']
-		]);
-		$order = GruppenAttribute\Utilities::gp_get_order([
-			'group_id' => $group_id,
-			'section_id' => $section_id
-		]);
+    $order = GruppenAttribute\Utilities::getProperties($params);
+
 		$copy_properties = GruppenAttribute\Utilities::gp_make_id_as_key($params['properties']);
 
 		return GruppenAttribute\Utilities::gp_ordering(['properties' => $copy_properties, 'order' => $order]);
