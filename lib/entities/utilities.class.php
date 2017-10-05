@@ -73,16 +73,17 @@ class Utilities {
 	/**
 	* @return array {
 	*   @option "properties" array | отсортирован по "order" array
+  * }
 	*/
 	private static function gp_ordering($items = ['properties' => [], 'order' => []]) {
 		$tmp = [];
 		foreach($items['order'] as $property_id) {
-			$tmp[] = $items['properties'][$property_id];
+      if ($items['properties'][$property_id])
+			  $tmp[] = $items['properties'][$property_id];
 		}
 
 		return $tmp;
 	}
-
 
 	private static function gp_make_id_as_key($items = []) {
 		$tmp = [];
@@ -92,6 +93,7 @@ class Utilities {
 		
 		return $tmp;
 	}		 
+
 	/**
 	*  @param "params" array {
 	*     @option "section_code" string    | code раздела
