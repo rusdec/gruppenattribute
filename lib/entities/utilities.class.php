@@ -36,6 +36,27 @@ class Utilities {
 
 		return GruppenAttribute\Utilities::gp_ordering(['properties' => $copy_properties, 'order' => $order]);
 	}
+  
+  public static function getProperties($params = []) {
+		if (!isset($params['section_code']) ||
+			!isset($params['iblock_id'])	||
+			!isset($params['group_code']) 
+		) {
+			return false;
+		}
+
+		$group_id = GruppenAttribute\Utilities::gp_get_group_id_by_code($params['group_code']);
+		$section_id = GruppenAttribute\Utilities::get_section_id_by_code([
+			'section_code' => $params['section_code'],
+			'iblock_id' => $params['iblock_id']
+		]);
+		$order = GruppenAttribute\Utilities::gp_get_order([
+			'group_id' => $group_id,
+			'section_id' => $section_id
+		]);
+
+    return $order;
+  }
 
 	/**
 	*  @param "group_code" string
